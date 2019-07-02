@@ -1,0 +1,89 @@
+<project name="FullscreenColors" default="dist" basedir=".">
+	<description>
+    simplest example build file
+  </description>
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="dist" location="dist" />
+	<property name="version" value="1.0" />
+	<property name="main-class" value="com.github.jirkafm.FullscreenColors" />	
+
+	<target name="init">
+		<tstamp />
+		<mkdir dir="${build}/Windows" />
+		<mkdir dir="${build}/Linux" />
+		<mkdir dir="${build}/Mac" />		
+	</target>
+
+	<target name="compile" depends="init" description="compile the source">
+		<javac srcdir="${src}" destdir="${build}/Windows" includeantruntime="false">
+			<classpath>
+				<path id="lib" location="lib/Windows/swt.jar" />
+			</classpath>
+		</javac>
+		<javac srcdir="${src}" destdir="${build}/Linux" includeantruntime="false">
+			<classpath>
+				<path id="lib" location="lib/Linux/swt.jar" />
+			</classpath>
+		</javac>
+		<javac srcdir="${src}" destdir="${build}/Mac" includeantruntime="false">
+			<classpath>
+				<path id="lib" location="lib/Mac/swt.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution">
+		<jar destfile="${dist}/${ant.project.name}-Windows-${version}.jar">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Implementation-Vendor" value="com.github.jirkafm" />
+				<attribute name="Implementation-Title" value="FullscreenColors" />
+				<attribute name="Implementation-Version" value="1.0.0" />
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+				<attribute name="Rsrc-Main-Class" value="${main-class}" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ swt.jar"/>
+			</manifest>
+			<zipfileset src="lib/jar-in-jar-loader.zip"/>
+			<fileset dir="${build}/Windows"/>
+			<zipfileset dir="lib/Windows" includes="swt.jar"/>
+		</jar>
+		<jar destfile="${dist}/${ant.project.name}-Linux-${version}.jar">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Implementation-Vendor" value="com.github.jirkafm" />
+				<attribute name="Implementation-Title" value="FullscreenColors" />
+				<attribute name="Implementation-Version" value="1.0.0" />
+				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+				<attribute name="Rsrc-Main-Class" value="${main-class}" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ swt.jar"/>
+			</manifest>
+			<zipfileset src="lib/jar-in-jar-loader.zip"/>
+			<fileset dir="${build}/Linux"/>
+			<zipfileset dir="lib/Linux" includes="swt.jar"/>
+		</jar>
+		<jar destfile="${dist}/${ant.project.name}-Mac-${version}.jar">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Implementation-Vendor" value="com.github.jirkafm" />
+				<attribute name="Implementation-Title" value="FullscreenColors" />
+				<attribute name="Implementation-Version" value="1.0.0" />
+				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+				<attribute name="Rsrc-Main-Class" value="${main-class}" />
+				<attribute name="Class-Path" value="." />
+				<attribute name="Rsrc-Class-Path" value="./ swt.jar"/>
+			</manifest>
+			<zipfileset src="lib/jar-in-jar-loader.zip"/>
+			<fileset dir="${build}/Mac"/>
+			<zipfileset dir="lib/Mac" includes="swt.jar"/>
+		</jar>
+	</target>
+
+	<target name="clean" description="clean up">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+</project>
