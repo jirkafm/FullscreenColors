@@ -6,7 +6,7 @@ Requires Java10 and newer.
 
 ### Build
 
-Building app can be done through Eclipse IDE or through ant build script. Run ant in project directory binaries will be generated in dist folder.
+Building application can be done through Eclipse IDE or through ant build script. Run ant inside project directory and binaries will be generated in dist folder.
 
 ![Ant Build](ant_build.png)
 
