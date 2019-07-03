@@ -39,6 +39,7 @@ class FullscreenColorsControl {
 
 	private void exitSequenceCheck(Event event) {
 		if (isExitKeySequence(event)) {
+			scheduler.shutdown();
 			shell.close();
 		}
 	}
