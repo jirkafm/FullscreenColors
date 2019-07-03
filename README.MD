@@ -3,7 +3,7 @@
 A simple SWT fullscreen application running on primary monitor. When user hits any key application will draw random color. Application can be terminated by *CTRL+Q* 
 keys.
 
-Requires Java10 and newer.
+Requires Java 1.8 and newer.
 
 ### Build
 
