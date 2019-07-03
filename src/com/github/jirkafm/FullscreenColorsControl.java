@@ -1,6 +1,9 @@
 package com.github.jirkafm;
 
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -9,25 +12,29 @@ import org.eclipse.swt.widgets.Shell;
 
 class FullscreenColorsControl {
 
-	private final Random random;
 	private final Shell shell;
+	private final ColorChangeRunnable colorChangeRunnable;
+
+	private final Random random = new Random();
+	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
 	public FullscreenColorsControl(Shell shell) {
 		this.shell = shell;
-		this.random = new Random();
+		this.colorChangeRunnable = new ColorChangeRunnable(shell);
 	}
 
 	public void init() {
-		shell.getDisplay().addFilter(SWT.KeyDown, this::generateColor);
+		shell.getDisplay().addFilter(SWT.KeyDown, this::registerColorChange);
 		shell.getDisplay().addFilter(SWT.KeyDown, this::exitSequenceCheck);
+		scheduler.scheduleAtFixedRate(colorChangeRunnable, 1, 500, TimeUnit.MILLISECONDS);
 	}
 
-	public void generateColor(Event event) {
+	public void registerColorChange(Event event) {
 		final int keyCode = event.keyCode;
 		final int red = keyCode % 255;
 		final int green = random.nextInt(255);
 		final int blue = random.nextInt(255);
-		shell.setBackground(new Color(shell.getDisplay(), red, green, blue));
+		colorChangeRunnable.nextColor(new Color(shell.getDisplay(), red, green, blue));
 	}
 
 	private void exitSequenceCheck(Event event) {
